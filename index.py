@@ -6,6 +6,7 @@ import time
 app = Flask(__name__)
 
 # Set your Africa's Talking API key and username
+# TODO: Replace 'your_api_key' and 'your_username' with your actual Africa's Talking API key and username
 api_key = 'your_api_key'
 username = 'your_username'
 
@@ -24,14 +25,16 @@ scheduled_reminders = {}
 # Define the USSD callback endpoint
 @app.route('/ussd/callback', methods=['POST'])
 def ussd_callback():
+    # Extract data from the USSD callback request
     session_id = request.form['sessionId']
     text = request.form['text']
 
     # Implement logic to handle USSD session based on the user's input
     if text == '':
+        # Initial prompt when the user starts the USSD session
         response = "CON Welcome to Reminder App. Enter your task:"
     elif 'CON' in text:
-        # User is still entering data
+        # User is still entering data, call the handle_user_input function
         response = handle_user_input(session_id, text)
     else:
         # User has finished entering data
@@ -40,6 +43,7 @@ def ussd_callback():
     return response
 
 def handle_user_input(session_id, text):
+    # Split the user's input based on '*'
     parts = text.split('*')
 
     if len(parts) == 1:
